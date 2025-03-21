@@ -27,15 +27,7 @@
       <version>5.9.3</version>
     </dependency>
 
-    <!-- JUnit 5 -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>5.10.2</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- SLF4J + Logback (логування) -->
+    <!-- SLF4J + Logback -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -47,7 +39,7 @@
       <version>1.4.14</version>
     </dependency>
 
-
+    <!-- AssertJ -->
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
@@ -55,11 +47,19 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- TestNG -->
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>7.11.0</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
     <plugins>
-      <!-- Плагін Maven Surefire для запуску тестів -->
+      <!-- Maven Surefire plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -71,10 +71,13 @@
           <includes>
             <include>**/*Test.java</include>
           </includes>
+          <suiteXmlFiles>
+            <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+          </suiteXmlFiles>
         </configuration>
       </plugin>
 
-      <!-- Компіляція Java 17 -->
+      <!-- Java 17 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>

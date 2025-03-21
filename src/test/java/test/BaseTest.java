@@ -1,9 +1,9 @@
 package test;
 
 import driver.DriverSingleton;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
 /**
  * Base test class that provides setup and teardown logic for WebDriver.
@@ -13,13 +13,13 @@ public abstract class BaseTest {
     protected WebDriver driver;
 
     /**DInitializing Driver*/
-    @BeforeEach
+    @BeforeMethod
     void setUp() {
         driver = DriverSingleton.getDriver();
     }
 
     /**Closing Driver*/
-    @AfterEach
+    @AfterMethod
     void tearDown() {
         DriverSingleton.closeDriver();
     }

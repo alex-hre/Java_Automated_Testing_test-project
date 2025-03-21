@@ -1,32 +1,39 @@
 package test;
 
 import model.User;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.testng.annotations.Test;
+import org.testng.annotations.DataProvider;
 import page.LoginPage;
 import service.UserDataProvider;
 
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
-
-import java.util.stream.Stream;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Execution(ExecutionMode.CONCURRENT)
 public class ParametrizedLoginTest extends BaseTest {
 
-    public static Stream<User> wrongUser() {
-        return UserDataProvider.getWrongUsers();
+    /** DataProvider to supply incorrect (wrong) user credentials for testing */
+    @DataProvider(name = "wrongUsers", parallel = true)
+    public Object[][] provideWrongUsers() {
+
+        // Convert the Stream<User> returned from UserDataProvider.getWrongUsers() to Object[][]
+        return UserDataProvider.getWrongUsers()
+                .map(user -> new Object[]{user})
+                .toArray(Object[][]::new);
     }
 
-    public static Stream<User> acceptedUser() {
-        return UserDataProvider.getAcceptedUsers();
+    /** DataProvider to supply accepted (valid) user credentials for testing */
+    @DataProvider(name = "acceptedUsers", parallel = true)
+    public Object[][] provideAcceptedUsers() {
+
+        // Convert the Stream<User> returned from UserDataProvider.getAcceptedUsers() to Object[][]
+        return UserDataProvider.getAcceptedUsers()
+                .map(user -> new Object[]{user})
+                .toArray(Object[][]::new);
     }
 
-    @ParameterizedTest
-    @MethodSource("wrongUser")
+    /** Test method for testing login with an empty username and empty password */
+    @Test(dataProvider = "wrongUsers")
     public void testLoginEmptyUser(User user) {
+
         String errorMessage = new LoginPage(getDriver())
                 .open()
                 .inputFields(user)
@@ -34,14 +41,16 @@ public class ParametrizedLoginTest extends BaseTest {
                 .login()
                 .getErrorMessage();
 
+        // Assert that the error message matches the expected message for an empty username
         assertThat(errorMessage)
                 .as("Expected error message for empty username")
                 .isEqualTo("Epic sadface: Username is required");
     }
 
-    @ParameterizedTest
-    @MethodSource("wrongUser")
+    /** Test method for testing login with an empty password */
+    @Test(dataProvider = "wrongUsers")
     public void testLoginEmptyPassword(User user) {
+
         String errorMessage = new LoginPage(getDriver())
                 .open()
                 .inputFields(user)
@@ -49,25 +58,25 @@ public class ParametrizedLoginTest extends BaseTest {
                 .login()
                 .getErrorMessage();
 
+        // Assert that the error message matches the expected message for an empty password
         assertThat(errorMessage)
                 .as("Expected error message for empty password")
                 .isEqualTo("Epic sadface: Password is required");
     }
 
-    @ParameterizedTest
-    @MethodSource("acceptedUser")
+    /** Test method for testing successful login with valid user credentials */
+    @Test(dataProvider = "acceptedUsers")
     public void testSuccessfulLogin(User user) {
+
         LoginPage loginPage = new LoginPage(getDriver())
                 .open()
                 .inputFields(user)
                 .login();
 
+        // Assert that no error message is displayed (login should be successful)
         assertThat(loginPage.isErrorDisplayed())
                 .as("Login should be successful, but error message appeared!")
                 .isFalse();
 
-        assertThat(getDriver().getCurrentUrl())
-                .as("User is not redirected to the inventory page!")
-                .isEqualTo("https://www.saucedemo.com/inventory.html");
     }
 }

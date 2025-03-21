@@ -16,7 +16,7 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class LoginPage {
 
-    private WebDriver driver;
+    private final WebDriver driver;
 
     /**
      * Web elements for login form fields and buttons
@@ -37,9 +37,6 @@ public class LoginPage {
 
     @FindBy(css = "div.app_logo")
     private WebElement siteTitle;
-
-
-
 
 
     /**Logger instance for logging actions*/
