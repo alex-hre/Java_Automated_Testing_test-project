@@ -1,13 +1,16 @@
 package page;
 
+import ch.qos.logback.core.sift.AppenderFactoryUsingSiftModel;
 import model.User;
-import org.openqa.selenium.Keys;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import java.time.Duration;
 
 
 /**
@@ -59,6 +62,11 @@ public class LoginPage {
      */
     public LoginPage open() {
         driver.get("https://www.saucedemo.com/");
+
+        // Ожидаем, пока элемент, например, заголовок страницы, не станет видимым
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='login_logo']")));  // Предположим, это логотип страницы или другой элемент
+
         return this;
     }
 
@@ -118,7 +126,22 @@ public class LoginPage {
 
 
     public String getErrorMessage() {
-        return errorMessage.getText();
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            WebElement error = wait.until(ExpectedConditions.visibilityOf(errorMessage));
+            return error.getText();
+        } catch (TimeoutException e) {
+            return "No Error Message Found"; // Если за 5 сек не появилось — значит ошибка в тесте
+        }
+    }
+
+    public String isRedirectionSuccessfull(){
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            return wait.until(ExpectedConditions.visibilityOf(siteTitle)).getText(); // If element is present
+        } catch (NoSuchElementException e) {
+            return "No such element. Login Failed"; // If element is not present - login was failed
+        }
     }
 
 }

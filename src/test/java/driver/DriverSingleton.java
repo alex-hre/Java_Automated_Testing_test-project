@@ -2,6 +2,7 @@ package driver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -11,41 +12,44 @@ public class DriverSingleton {
 
     private DriverSingleton() {}
 
-    /**Creating driver*/
+    /** Creating driver */
     public static WebDriver getDriver() {
-
-        /*If driver is not created - creating new driver*/
         if (driver.get() == null) {
-            String browser = System.getProperty("browser", "chrome"); // default driver is Chrome
-            System.out.println("Browser: " + browser);
-
-            switch (browser.toLowerCase()) {
-                case "firefox":
-                    WebDriverManager.firefoxdriver().setup();
-                    driver.set(new FirefoxDriver());
-                    break;
-
-                case "edge":
-                    WebDriverManager.edgedriver().setup();
-                    driver.set(new EdgeDriver());
-                    break;
-
-                case "chrome":
-                default:
-                    WebDriverManager.chromedriver().setup();
-                    driver.set(new org.openqa.selenium.chrome.ChromeDriver());
-            }
-
-            driver.get().manage().window().maximize();
+            driver.set(createDriver());
         }
         return driver.get();
     }
 
-    /**Closing driver*/
-    public static void closeDriver(){
+    /** Closing driver */
+    public static void closeDriver() {
         if (driver.get() != null) {
+            System.out.println("[DRIVER] Closing WebDriver for thread: " + Thread.currentThread().getId());
             driver.get().quit();
             driver.remove();
         }
+    }
+
+    /** Driver creation logic */
+    private static WebDriver createDriver() {
+        String browser = System.getProperty("browser", "chrome"); // Default: Chrome
+        System.out.println("Browser: " + browser);
+
+        WebDriver newDriver = switch (browser.toLowerCase()) {
+            case "firefox" -> {
+                WebDriverManager.firefoxdriver().setup();
+                yield new FirefoxDriver();
+            }
+            case "edge" -> {
+                WebDriverManager.edgedriver().setup();
+                yield new EdgeDriver();
+            }
+            default -> {
+                WebDriverManager.chromedriver().setup();
+                yield new ChromeDriver();
+            }
+        };
+        newDriver.manage().window().maximize();
+        System.out.println("[DRIVER] Creating new WebDriver for thread: " + Thread.currentThread().getId());
+        return newDriver;
     }
 }

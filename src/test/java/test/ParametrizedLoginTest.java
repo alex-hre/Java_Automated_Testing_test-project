@@ -32,7 +32,7 @@ public class ParametrizedLoginTest extends BaseTest {
 
     /** Test method for testing login with an empty username and empty password */
     @Test(dataProvider = "wrongUsers")
-    public void testLoginEmptyUser(User user) {
+    public void testLoginEmptyUser(User user) throws InterruptedException {
 
         String errorMessage = new LoginPage(getDriver())
                 .open()
@@ -49,7 +49,7 @@ public class ParametrizedLoginTest extends BaseTest {
 
     /** Test method for testing login with an empty password */
     @Test(dataProvider = "wrongUsers")
-    public void testLoginEmptyPassword(User user) {
+    public void testLoginEmptyPassword(User user) throws InterruptedException {
 
         String errorMessage = new LoginPage(getDriver())
                 .open()
@@ -66,17 +66,16 @@ public class ParametrizedLoginTest extends BaseTest {
 
     /** Test method for testing successful login with valid user credentials */
     @Test(dataProvider = "acceptedUsers")
-    public void testSuccessfulLogin(User user) {
+    public void testSuccessfulLogin(User user) throws InterruptedException {
 
         LoginPage loginPage = new LoginPage(getDriver())
                 .open()
                 .inputFields(user)
                 .login();
 
-        // Assert that no error message is displayed (login should be successful)
-        assertThat(loginPage.isErrorDisplayed())
-                .as("Login should be successful, but error message appeared!")
-                .isFalse();
-
+        // Assert that correct header is displayed (login should be successful)
+        assertThat(loginPage.isRedirectionSuccessfull())
+                .as("Expected successfull redirection")
+                .isEqualTo("Swag Labs");
     }
 }
