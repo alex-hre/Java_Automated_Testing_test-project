@@ -73,6 +73,7 @@ public class ParametrizedLoginTest extends BaseTest {
                 .inputFields(user)
                 .login();
 
+
         // Assert that correct header is displayed (login should be successful)
         assertThat(loginPage.isRedirectionSuccessfull())
                 .as("Expected successfull redirection")
