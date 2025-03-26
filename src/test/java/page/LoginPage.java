@@ -115,6 +115,19 @@ public class LoginPage {
         return this;
     }
 
+    public HomePage loginSuccessful() {
+        loginButton.click();
+        logger.info("Clicked Login button");
+
+        if (isErrorDisplayed()) {
+            logger.error("Login failed. Error message: {}", getErrorMessage());
+            throw new IllegalStateException("Login failed, cannot proceed to HomePage");
+        }
+
+        logger.info("Login successful, navigating to HomePage");
+        return new HomePage(driver);
+    }
+
     /**Catching error messages*/
     public boolean isErrorDisplayed() {
         try {
@@ -132,15 +145,6 @@ public class LoginPage {
             return error.getText();
         } catch (TimeoutException e) {
             return "No Error Message Found"; // Если за 5 сек не появилось — значит ошибка в тесте
-        }
-    }
-
-    public String isRedirectionSuccessfull(){
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-            return wait.until(ExpectedConditions.visibilityOf(siteTitle)).getText(); // If element is present
-        } catch (NoSuchElementException e) {
-            return "No such element. Login Failed"; // If element is not present - login was failed
         }
     }
 

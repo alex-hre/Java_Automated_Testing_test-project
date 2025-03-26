@@ -1,8 +1,10 @@
 package test;
 
+import driver.DriverSingleton;
 import model.User;
 import org.testng.annotations.Test;
 import org.testng.annotations.DataProvider;
+import page.HomePage;
 import page.LoginPage;
 import service.UserDataProvider;
 
@@ -34,7 +36,7 @@ public class ParametrizedLoginTest extends BaseTest {
     @Test(dataProvider = "wrongUsers")
     public void testLoginEmptyUser(User user) throws InterruptedException {
 
-        String errorMessage = new LoginPage(getDriver())
+        String errorMessage = new LoginPage(DriverSingleton.getDriver())
                 .open()
                 .inputFields(user)
                 .clearFields(true, true)
@@ -51,7 +53,7 @@ public class ParametrizedLoginTest extends BaseTest {
     @Test(dataProvider = "wrongUsers")
     public void testLoginEmptyPassword(User user) throws InterruptedException {
 
-        String errorMessage = new LoginPage(getDriver())
+        String errorMessage = new LoginPage(DriverSingleton.getDriver())
                 .open()
                 .inputFields(user)
                 .clearFields(false, true)
@@ -68,14 +70,14 @@ public class ParametrizedLoginTest extends BaseTest {
     @Test(dataProvider = "acceptedUsers")
     public void testSuccessfulLogin(User user) throws InterruptedException {
 
-        LoginPage loginPage = new LoginPage(getDriver())
+        HomePage homePage = new LoginPage(DriverSingleton.getDriver())
                 .open()
                 .inputFields(user)
-                .login();
+                .loginSuccessful();
 
 
         // Assert that correct header is displayed (login should be successful)
-        assertThat(loginPage.isRedirectionSuccessfull())
+        assertThat(homePage.getPageTitle())
                 .as("Expected successfull redirection")
                 .isEqualTo("Swag Labs");
     }

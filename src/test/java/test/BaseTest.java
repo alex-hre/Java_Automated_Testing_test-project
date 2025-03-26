@@ -18,10 +18,10 @@ public abstract class BaseTest {
     /**Initializing Driver*/
     @BeforeMethod
     void setUp() {
-        driver = DriverSingleton.getDriver();
+        DriverSingleton.getDriver(); // Просто создаем драйвер
     }
 
-    /**Closing Driver*/
+    /** Closing Driver */
     @AfterMethod
     void tearDown() {
         DriverSingleton.closeDriver();
