@@ -51,23 +51,5 @@ public class UserDataProvider {
         );
     }
 
-    /** DataProvider for passing the "wrong" users to test methods. */
-    @DataProvider(name = "wrongUsers", parallel = true)
-    public static Object[][] provideWrongUsers() {
 
-        /* Convert the Stream of "wrong" users into a 2D array of Object[] for the DataProvider. */
-        return getWrongUsers()
-                .map(user -> new Object[]{user})
-                .toArray(Object[][]::new);
-    }
-
-    /** DataProvider for passing the "accepted" users to test methods. */
-    @DataProvider(name = "acceptedUsers", parallel = true)
-    public static Object[][] provideAcceptedUsers() {
-
-        /* Convert the Stream of "accepted" users into a 2D array of Object[] for the DataProvider. */
-        return getAcceptedUsers()
-                .map(user -> new Object[]{user})
-                .toArray(Object[][]::new);
-    }
 }

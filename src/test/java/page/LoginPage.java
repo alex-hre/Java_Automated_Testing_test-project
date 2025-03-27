@@ -63,9 +63,8 @@ public class LoginPage {
     public LoginPage open() {
         driver.get("https://www.saucedemo.com/");
 
-        // Ожидаем, пока элемент, например, заголовок страницы, не станет видимым
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='login_logo']")));  // Предположим, это логотип страницы или другой элемент
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='login_logo']")));
 
         return this;
     }

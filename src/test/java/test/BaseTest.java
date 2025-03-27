@@ -16,10 +16,10 @@ public abstract class BaseTest {
     protected WebDriver driver;
 
     /**Initializing Driver*/
-    @BeforeMethod
+    /*@BeforeMethod
     void setUp() {
-        DriverSingleton.getDriver(); // Просто создаем драйвер
-    }
+        DriverSingleton.getDriver();
+    }*/
 
     /** Closing Driver */
     @AfterMethod
@@ -27,7 +27,4 @@ public abstract class BaseTest {
         DriverSingleton.closeDriver();
     }
 
-    protected WebDriver getDriver() {
-        return driver;
-    }
 }

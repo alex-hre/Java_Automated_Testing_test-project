@@ -51,8 +51,8 @@ public class User {
             return false;
         }
 
-        return Objects.equals(getUsername(), user.getPassword()) &&
-                Objects.equals(getPassword(), user.getUsername());
+        return Objects.equals(getUsername(), user.getUsername()) &&
+                Objects.equals(getPassword(), user.getPassword());
 
     }
 
